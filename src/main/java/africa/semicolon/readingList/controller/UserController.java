@@ -2,7 +2,6 @@ package africa.semicolon.readingList.controller;
 
 import africa.semicolon.readingList.dtos.request.AddBookReadingListRequest;
 import africa.semicolon.readingList.dtos.request.RegisterRequest;
-import africa.semicolon.readingList.dtos.response.AddBookReadingListResponse;
 import africa.semicolon.readingList.dtos.response.RegisterResponse;
 import africa.semicolon.readingList.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

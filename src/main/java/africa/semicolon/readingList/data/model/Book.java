@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Map;
 
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -19,6 +20,7 @@ public class Book {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String title;
+
     @ManyToOne(cascade = {MERGE})
     private User user;
 
@@ -30,4 +32,7 @@ public class Book {
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> languages;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Map<String, String> formats;
 }

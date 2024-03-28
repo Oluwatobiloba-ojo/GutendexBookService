@@ -1,15 +1,14 @@
 package africa.semicolon.readingList.service;
 
-import africa.semicolon.readingList.data.model.Book;
 import africa.semicolon.readingList.data.model.GutendexBook;
 import africa.semicolon.readingList.dtos.response.BookResponse;
 import africa.semicolon.readingList.exception.BookNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
@@ -24,6 +23,11 @@ class GutendexUserServiceTest {
         assertThat(bookResponse).isNotNull();
         assertThat(bookResponse.getResults()).isNotNull();
         assertThat(bookResponse.getResults().size()).isEqualTo(32);
+    }
+
+    @Test
+    public void testBookFormat() throws BookNotFoundException {
+        GutendexBook book = gutendexBookService.fetchABook("The Adventures of Roderick Random");
     }
 
     @Test

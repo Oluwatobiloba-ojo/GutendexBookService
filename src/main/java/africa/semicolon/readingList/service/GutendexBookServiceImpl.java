@@ -1,10 +1,8 @@
 package africa.semicolon.readingList.service;
 
-import africa.semicolon.readingList.data.model.Book;
 import africa.semicolon.readingList.data.model.GutendexBook;
 import africa.semicolon.readingList.dtos.response.BookResponse;
 import africa.semicolon.readingList.exception.BookNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +30,7 @@ public class GutendexBookServiceImpl implements GutendexBookService{
         url += title;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<BookResponse> response = restTemplate.getForEntity(url, BookResponse.class);
+        System.out.println(response.getBody().getResults().getFirst());
         return response.getBody().getResults().getFirst();
     }
 

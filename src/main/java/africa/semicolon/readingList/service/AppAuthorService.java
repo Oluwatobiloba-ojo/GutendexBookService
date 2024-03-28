@@ -1,6 +1,7 @@
 package africa.semicolon.readingList.service;
 
 import africa.semicolon.readingList.data.model.Authors;
+import africa.semicolon.readingList.data.model.Book;
 import africa.semicolon.readingList.dtos.request.AddAuthorRequest;
 import africa.semicolon.readingList.dtos.response.AddAuthorResponse;
 import africa.semicolon.readingList.exception.AuthorNotFoundException;
@@ -46,5 +47,10 @@ public class AppAuthorService implements AuthorService{
     public Authors findAuthorBy(Long id) {
         return repository.findById(id)
                 .orElseThrow(()-> new AuthorNotFoundException("Author does not exist"));
+    }
+
+    @Override
+    public List<Authors> findAuthorByBook(Book book) {
+        return repository.findAuthorByBook(book);
     }
 }

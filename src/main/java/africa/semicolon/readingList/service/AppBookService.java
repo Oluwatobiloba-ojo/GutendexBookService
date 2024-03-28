@@ -6,6 +6,7 @@ import africa.semicolon.readingList.data.repository.BookRepository;
 import africa.semicolon.readingList.dtos.request.AddAuthorRequest;
 import africa.semicolon.readingList.dtos.request.AddBookRequest;
 import africa.semicolon.readingList.dtos.response.AddBookResponse;
+import africa.semicolon.readingList.dtos.response.ReadingBookResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,11 @@ public class AppBookService implements BookService{
 
 
     @Override
-    public List<Book> findBooksBelongingToUser(User user) {
-        return repository.findBooksByUser(user);
+    public List<ReadingBookResponse> findBooksBelongingToUser(User user) {
+        List<Book> books = repository.findBooksByUser(user);
+       return books.stream()
+                .map(book -> new ReadingBookResponse(book, authorService.findAuthorByBook(book)))
+                .toList();
     }
 
 }

@@ -1,6 +1,5 @@
 package africa.semicolon.readingList.service;
 
-import africa.semicolon.readingList.data.model.Book;
 import africa.semicolon.readingList.data.model.GutendexBook;
 import africa.semicolon.readingList.data.model.User;
 import africa.semicolon.readingList.data.repository.ReadingListRepository;
@@ -9,6 +8,7 @@ import africa.semicolon.readingList.dtos.request.AddBookRequest;
 import africa.semicolon.readingList.dtos.request.RegisterRequest;
 import africa.semicolon.readingList.dtos.response.AddBookReadingListResponse;
 import africa.semicolon.readingList.dtos.response.AddBookResponse;
+import africa.semicolon.readingList.dtos.response.ReadingBookResponse;
 import africa.semicolon.readingList.dtos.response.RegisterResponse;
 import africa.semicolon.readingList.exception.BookNotFoundException;
 import africa.semicolon.readingList.exception.UserDoesNotExistException;
@@ -26,12 +26,11 @@ public class AppUserService implements UserService {
     private BookService bookService;
     @Autowired
     private GutendexBookService gutendexBookService;
-
     private final ModelMapper modelMapper = new ModelMapper();
+
     @Override
     public RegisterResponse register(RegisterRequest request) {
         User user = modelMapper.map(request, User.class);
-        System.out.println(user);
         User savedUser = reposoitory.save(user);
         RegisterResponse response = new RegisterResponse();
         response.setReadingListId(savedUser.getId());
@@ -47,13 +46,14 @@ public class AppUserService implements UserService {
         request1.setUser(user);
         AddBookResponse response = bookService.addBook(request1);
         AddBookReadingListResponse response1 = new AddBookReadingListResponse();
+        System.out.println(response.getBookAdded());
         response1.setBook(response.getBookAdded());
         response1.setMessage("Book added successfully");
         return response1;
     }
 
     @Override
-    public List<Book> getBooks(Long id) {
+    public List<ReadingBookResponse> getBooks(Long id) {
         User user = findBy(id);
         return bookService.findBooksBelongingToUser(user);
     }

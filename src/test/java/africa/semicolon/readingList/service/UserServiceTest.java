@@ -1,10 +1,13 @@
 package africa.semicolon.readingList.service;
 
 import africa.semicolon.readingList.dtos.request.AddBookReadingListRequest;
+import africa.semicolon.readingList.dtos.request.LoginRequest;
 import africa.semicolon.readingList.dtos.request.RegisterRequest;
 import africa.semicolon.readingList.dtos.response.AddBookReadingListResponse;
+import africa.semicolon.readingList.dtos.response.LoginResponse;
 import africa.semicolon.readingList.dtos.response.RegisterResponse;
 import africa.semicolon.readingList.exception.BookNotFoundException;
+import africa.semicolon.readingList.exception.InvalidDetailException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,5 +53,15 @@ class UserServiceTest {
         AddBookReadingListResponse response1 = userService.addBooks(request);
         assertThat(response1).isNotNull();
         assertThat(userService.getBooks(201L).size()).isEqualTo(2);
+    }
+
+    @Test
+    @Sql(scripts = "/scripts/data.sql")
+    public void testUserCanLogin() throws InvalidDetailException {
+        LoginRequest request = new LoginRequest();
+        request.setUsername("username");
+        request.setPassword("password");
+        LoginResponse response = userService.login(request);
+        assertThat(response).isNotNull();
     }
 }

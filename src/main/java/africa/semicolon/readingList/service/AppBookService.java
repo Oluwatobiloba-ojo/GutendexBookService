@@ -20,18 +20,27 @@ public class AppBookService implements BookService{
     @Autowired
     private AuthorService authorService;
     private final ModelMapper modelMapper = new ModelMapper();
+    private final String IMAGE_KEY = "image/jpeg";
+    private final String TEXT_KEY = "text/html";
+
     @Override
     public AddBookResponse addBook(AddBookRequest addBookRequest) {
        Book newBook =  modelMapper.map(addBookRequest, Book.class);
-       List<AddAuthorRequest> requests = addBookRequest.getAuthors()
-               .stream()
-               .map(authors -> new AddAuthorRequest(authors, newBook))
-               .toList();
-       authorService.create(requests);
-       AddBookResponse response = new AddBookResponse();
-       response.setBookAdded(newBook);
-       response.setId(newBook.getId());
-       return response;
+       newBook.setImage(addBookRequest.getFormats().get(IMAGE_KEY));
+       newBook.setBook(addBookRequest.getFormats().get(TEXT_KEY));
+        List<AddAuthorRequest> requests = getAddAuthorRequests(addBookRequest, newBook);
+        authorService.create(requests);
+        AddBookResponse response = new AddBookResponse();
+        response.setBookAdded(newBook);
+        response.setId(newBook.getId());
+        return response;
+    }
+
+    private static List<AddAuthorRequest> getAddAuthorRequests(AddBookRequest addBookRequest, Book newBook) {
+        return addBookRequest.getAuthors()
+                .stream()
+                .map(authors -> new AddAuthorRequest(authors, newBook))
+                .toList();
     }
 
 

@@ -5,12 +5,11 @@ import africa.semicolon.readingList.data.model.User;
 import africa.semicolon.readingList.data.repository.ReadingListRepository;
 import africa.semicolon.readingList.dtos.request.AddBookReadingListRequest;
 import africa.semicolon.readingList.dtos.request.AddBookRequest;
+import africa.semicolon.readingList.dtos.request.LoginRequest;
 import africa.semicolon.readingList.dtos.request.RegisterRequest;
-import africa.semicolon.readingList.dtos.response.AddBookReadingListResponse;
-import africa.semicolon.readingList.dtos.response.AddBookResponse;
-import africa.semicolon.readingList.dtos.response.ReadingBookResponse;
-import africa.semicolon.readingList.dtos.response.RegisterResponse;
+import africa.semicolon.readingList.dtos.response.*;
 import africa.semicolon.readingList.exception.BookNotFoundException;
+import africa.semicolon.readingList.exception.InvalidDetailException;
 import africa.semicolon.readingList.exception.UserDoesNotExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ public class AppUserService implements UserService {
     @Autowired
     private GutendexBookService gutendexBookService;
     private final ModelMapper modelMapper = new ModelMapper();
+
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
@@ -62,5 +62,18 @@ public class AppUserService implements UserService {
     public User findBy(Long id) {
         return reposoitory.findById(id)
                 .orElseThrow(()->  new UserDoesNotExistException("User does not exist"));
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest request) throws InvalidDetailException {
+       User user = findUserBy(request.getUsername());
+       if (!user.getPassword().equals(request.getPassword())) throw new InvalidDetailException("Invalid details");
+       LoginResponse response = new LoginResponse();
+       response.setMessage("Login successfully");
+       return response;
+    }
+
+    private User findUserBy(String username) throws InvalidDetailException {
+        return reposoitory.findByUsername(username).orElseThrow(()-> new InvalidDetailException("Invalid detail"));
     }
 }

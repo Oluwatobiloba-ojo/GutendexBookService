@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Map;
 
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -24,6 +23,9 @@ public class Book {
     @ManyToOne(cascade = {MERGE})
     private User user;
 
+    private String image;
+    private String book;
+
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> subjects;
 
@@ -32,7 +34,4 @@ public class Book {
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> languages;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Map<String, String> formats;
 }

@@ -1,6 +1,7 @@
 package africa.semicolon.readingList.controller;
 
 import africa.semicolon.readingList.dtos.request.AddBookReadingListRequest;
+import africa.semicolon.readingList.dtos.request.LoginRequest;
 import africa.semicolon.readingList.dtos.request.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -49,10 +50,24 @@ class UserControllerTest {
     }
 
     @Test
+    @Sql(scripts = "/scripts/data.sql")
     public void testGetBooks() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/request/books/201")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
+
+    @Test
+    @Sql(scripts = "/scripts/data.sql")
+    public void testThatUserCanLogin() throws Exception {
+        LoginRequest request = new LoginRequest();
+        request.setUsername("username");
+        request.setPassword("password");
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/request/sign_in/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsBytes(request)))
+                .andExpect(status().isAccepted())
                 .andDo(print());
     }
 

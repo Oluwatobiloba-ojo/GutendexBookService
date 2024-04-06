@@ -1,6 +1,7 @@
 package africa.semicolon.readingList.controller;
 
 import africa.semicolon.readingList.dtos.request.AddBookReadingListRequest;
+import africa.semicolon.readingList.dtos.request.LoginRequest;
 import africa.semicolon.readingList.dtos.request.RegisterRequest;
 import africa.semicolon.readingList.dtos.response.RegisterResponse;
 import africa.semicolon.readingList.service.UserService;
@@ -33,6 +34,15 @@ public class UserController {
         try {
             return ResponseEntity.ok(userService.getBooks(userId));
         }catch (Exception exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    @PostMapping("/sign_in/user")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+        try{
+            return ResponseEntity.accepted().body(userService.login(loginRequest));
+        }catch (Exception exception){
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }
